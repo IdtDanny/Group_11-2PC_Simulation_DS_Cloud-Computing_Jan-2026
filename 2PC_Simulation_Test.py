@@ -1,3 +1,11 @@
+"""
+    This is sample simulation of simple 2PC (2-Commit Phase) for 3 DBs as participant and 1 Coordinator,
+
+    To Ensure the proper preparation, all participant commit to set rate_failure as per randomized timer,
+
+    They vote yes when the rate_failure are within the range set for consideration.
+"""
+
 import random
 import time
 
@@ -45,8 +53,8 @@ class Participant:
 
 
 class Coordinator:
-    def __init__(self, participants):
-        self.participants = participants
+    def __init__(self, part):
+        self.participants = part
 
     def execute_transaction(self, transaction_id):
         """Execute 2PC protocol"""
@@ -97,27 +105,27 @@ class Coordinator:
 
 # Example usage
 if __name__ == "__main__":
-    print("Two-Phase Commit Protocol Simulation")
+    print("2PC (Two-Phase Commit) Protocol Simulation")
     print("=====================================\n")
 
     # Create participants (databases, services, etc.)
     participants = [
-        Participant("Database-A", rate_failure=0.2),
-        Participant("Database-B", rate_failure=0.1),
-        Participant("Database-C", rate_failure=0.2)
+        Participant("Database-A", rate_failure = 0.2),
+        Participant("Database-B", rate_failure = 0.2),
+        Participant("Database-C", rate_failure = 0.3)
     ]
 
     # Create coordinator
     coordinator = Coordinator(participants)
 
     # Run multiple transactions
-    for i in range(1, 4):
+    for i in range(1, 3):
         coordinator.execute_transaction(f"TXN-{i}")
         time.sleep(1)
 
     # Summary
     print("\n\nSUMMARY")
-    print("=" * 60)
-    for p in participants:
-        status = "COMMITTED" if p.committed else "ABORTED"
-        print(f"{p.name}: {status}")
+    print("*" * 60)
+    for par in participants:
+        status = "COMMITTED" if par.committed else "ABORTED"
+        print(f"{par.name}: {status}")
