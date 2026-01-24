@@ -6,3 +6,9 @@ Contributors:
 2. Edmond Hitayezu
 3. Denyse Niyonkuru
 4. Philbert Nsengiyumva
+
+To get started with this Simulation:
+
+->  Clone the Repo:
+->  Use Pycharm to open the file,
+->  Click Run to run the file.
