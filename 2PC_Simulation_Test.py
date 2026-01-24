@@ -4,6 +4,25 @@
     To Ensure the proper preparation, all participant commit to set rate_failure as per randomized timer,
 
     They vote yes when the rate_failure are within the range set for consideration.
+
+    -> The rate_failure determines the probability that a participant will fail during the prepare phase.
+
+    How it works:
+
+    random.random() -> generates a number between 0.0 and 1.0
+        * If that number is less than rate_failure set, the participant votes NO
+        * If rate_failure = 0.2, there's a 20% chance the participant will fail
+
+    Examples:
+        -> rate_failure = 0.0 → Participant never fails (always votes YES)
+        -> rate_failure = 0.2 → Participant fails 20% of the time
+        -> rate_failure = 0.5 → Participant fails 50% of the time
+        -> rate_failure = 1.0 → Participant always fails (always votes NO)
+
+    This simulates real-world scenarios where a database might be temporarily unavailable,
+    have a lock conflict, run out of resources, or encounter an error that prevents it from committing
+    the transaction.
+
 """
 
 import random
@@ -11,7 +30,7 @@ import time
 
 
 class Participant:
-    def __init__(self, name, rate_failure=0.1):
+    def __init__(self, name, rate_failure = 0.2):
         self.name = name
         self.rate_failure = rate_failure
         self.prepared = False
@@ -85,7 +104,7 @@ class Coordinator:
             for participant in self.participants:
                 participant.commit()
 
-            print(f"\n{'=' * 60}")
+            print(f"\n{'-' * 60}")
             print(f"✓ Transaction {transaction_id} COMMITTED successfully")
             print(f"{'=' * 60}")
             return True
@@ -97,9 +116,9 @@ class Coordinator:
             for participant in self.participants:
                 participant.abort()
 
-            print(f"\n{'=' * 60}")
+            print(f"\n{'!' * 60}")
             print(f"❌ Transaction {transaction_id} ABORTED")
-            print(f"{'=' * 60}")
+            print(f"{'!' * 60}")
             return False
 
 
